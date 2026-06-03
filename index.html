@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caco Runners — La Comunidad de Endurance de Cap Cana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap">
+<style>
+:root{
+  --navy:#081826;--ocean:#0E5A8A;--aqua:#4FD1E8;--cyan:#5EEBFF;
+  --white:#F7FAFC;--graphite:#4F4F4F;--sunset:#FFB37B;
+  --aqua-15:rgba(79,209,232,.15);
+  --f-d:'Satoshi',sans-serif;--f-b:'DM Sans',sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--f-b);background:var(--navy);color:var(--white);overflow-x:hidden;cursor:none;}
+a{text-decoration:none;color:inherit;}
+button{cursor:none;border:none;background:none;font-family:var(--f-b);}
+
+#cur{width:10px;height:10px;border-radius:50%;background:var(--cyan);position:fixed;top:0;left:0;pointer-events:none;z-index:9999;mix-blend-mode:difference;}
+#cur-ring{width:36px;height:36px;border-radius:50%;border:1px solid rgba(94,235,255,.45);position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transition:width .3s,height .3s;}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:1.5rem 4rem;display:flex;align-items:center;justify-content:space-between;transition:all .5s var(--ease);}
+nav.solid{background:rgba(8,24,38,.94);backdrop-filter:blur(24px);padding:1rem 4rem;border-bottom:1px solid rgba(79,209,232,.08);}
+.nav-logo{font-family:var(--f-d);font-weight:900;font-size:1.1rem;letter-spacing:-.02em;display:flex;align-items:center;gap:.4rem;}
+.ndot{width:7px;height:7px;border-radius:50%;background:var(--cyan);display:inline-block;animation:pdot 2.5s ease-in-out infinite;}
+@keyframes pdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.5)}}
+.nav-links{display:flex;gap:2.5rem;list-style:none;}
+.nav-links a{font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(247,250,252,.45);transition:color .2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:1px;background:var(--aqua);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease);}
+.nav-links a:hover{color:var(--white);}
+.nav-links a:hover::after{transform:scaleX(1);}
+.nav-pill{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.6rem 1.5rem;background:var(--aqua);color:var(--navy);border-radius:100px;transition:all .25s var(--ease);}
+.nav-pill:hover{background:var(--cyan);box-shadow:0 0 28px rgba(94,235,255,.35);transform:translateY(-1px);}
+.nav-mob{display:none;}
+
+/* HERO — grid layout fixes mobile centering */
+.hero{min-height:100svh;display:grid;grid-template-rows:1fr auto;padding:0 4rem;position:relative;overflow:hidden;background:var(--navy);}
+
+/* Vimeo background video */
+.hero-video-wrap{position:absolute;inset:0;z-index:0;overflow:hidden;}
+.hero-video-wrap iframe{
+  position:absolute;
+  top:50%;left:50%;
+  /* 9:16 portrait video — needs to be tall enough to fill wide screens.
+     On desktop: make width large enough so height covers 100vh.
+     Portrait ratio = width / 0.5625 (9/16 inverted) */
+  width:56.25vh;   /* 9/16 * 100vh — natural width for portrait at viewport height */
+  height:100vh;
+  /* But on wide screens 56.25vh may be too narrow — override with vw logic */
+  min-width:100vw;
+  min-height:177.78vw; /* 16/9 * 100vw — ensures full width coverage */
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+/* Dark overlay so text stays readable */
+.hero-video-overlay{
+  position:absolute;inset:0;z-index:1;
+  background:linear-gradient(
+    to bottom,
+    rgba(8,24,38,.70) 0%,
+    rgba(8,24,38,.50) 40%,
+    rgba(8,24,38,.75) 80%,
+    rgba(8,24,38,.92) 100%
+  );
+}
+.hero-grid-bg{position:absolute;inset:0;z-index:2;background-image:linear-gradient(rgba(79,209,232,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(79,209,232,.03) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 20%,transparent 100%);}
+
+.hero-body{position:relative;z-index:3;display:flex;flex-direction:column;justify-content:center;padding-top:8rem;padding-bottom:2rem;}
+.hero-tag{display:inline-flex;align-items:center;gap:.55rem;background:var(--aqua-15);border:1px solid rgba(79,209,232,.22);border-radius:100px;padding:.38rem 1rem;font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--aqua);margin-bottom:2.2rem;width:fit-content;opacity:0;transform:translateY(16px);animation:up .8s var(--ease) .2s forwards;}
+.tag-dot{width:5px;height:5px;border-radius:50%;background:var(--aqua);}
+h1.hero-h1{font-family:var(--f-d);font-weight:900;font-size:clamp(3.5rem,8.8vw,9.5rem);line-height:.9;letter-spacing:-.04em;color:var(--white);margin-bottom:2rem;opacity:0;transform:translateY(28px);animation:up 1s var(--ease) .4s forwards;}
+h1.hero-h1 .ac{color:var(--aqua);}
+h1.hero-h1 .ol{color:transparent;-webkit-text-stroke:1.5px rgba(247,250,252,.28);}
+.hero-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;opacity:0;transform:translateY(18px);animation:up .9s var(--ease) .7s forwards;}
+.hero-sub{font-size:1rem;line-height:1.7;color:rgba(247,250,252,.48);max-width:400px;}
+.hero-sub b{color:var(--aqua);font-weight:500;}
+.hero-btns{display:flex;gap:.9rem;align-items:center;flex-shrink:0;}
+.btn-s{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.85rem 2rem;border-radius:100px;background:var(--aqua);color:var(--navy);transition:all .25s var(--ease);display:inline-block;}
+.btn-s:hover{background:var(--cyan);transform:translateY(-2px);box-shadow:0 12px 36px rgba(94,235,255,.28);}
+.btn-o{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.85rem 2rem;border-radius:100px;border:1px solid rgba(247,250,252,.18);color:var(--white);transition:all .25s var(--ease);display:inline-block;}
+.btn-o:hover{border-color:var(--aqua);color:var(--aqua);}
+
+.stats-strip{position:relative;z-index:3;display:flex;border-top:1px solid rgba(79,209,232,.07);background:rgba(8,24,38,.72);backdrop-filter:blur(14px);margin:0 -4rem;opacity:0;animation:fi .8s var(--ease) 1.1s forwards;}
+.si{flex:1;padding:1.4rem 2rem;border-right:1px solid rgba(79,209,232,.07);}
+.si:last-child{border-right:none;}
+.sn{font-family:var(--f-d);font-weight:900;font-size:1.8rem;letter-spacing:-.04em;line-height:1;color:var(--white);}
+.sn sup{font-size:.75rem;color:var(--aqua);vertical-align:super;}
+.sl{font-size:.6rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(247,250,252,.28);margin-top:.2rem;}
+@keyframes up{to{opacity:1;transform:translateY(0)}}
+@keyframes fi{to{opacity:1}}
+
+section{padding:8rem 4rem;}
+.lbl{font-size:.6rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--aqua);margin-bottom:1rem;display:flex;align-items:center;gap:.7rem;}
+.lbl::before{content:'';display:block;width:22px;height:1px;background:var(--aqua);}
+.lbl.dk{color:var(--ocean);}.lbl.dk::before{background:var(--ocean);}
+h2.sh{font-family:var(--f-d);font-weight:900;font-size:clamp(2.4rem,4.5vw,4.8rem);line-height:.95;letter-spacing:-.04em;color:var(--white);margin-bottom:1rem;}
+h2.sh.dk{color:var(--navy);}
+.sub{font-size:.95rem;line-height:1.7;color:rgba(247,250,252,.42);max-width:460px;margin-bottom:3.5rem;}
+.sub.dk{color:var(--graphite);}
+.rv{opacity:0;transform:translateY(28px);transition:opacity .8s var(--ease),transform .8s var(--ease);}
+.rv.in{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+
+/* ── CALENDARIO ── */
+#calendario{background:#F0F5F8;}
+.cal-header{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;}
+.cal-strava-link{display:inline-flex;align-items:center;gap:.5rem;font-size:.63rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ocean);border:1px solid rgba(14,90,138,.3);border-radius:100px;padding:.42rem 1rem;transition:all .2s;}
+.cal-strava-link:hover{background:var(--ocean);color:var(--white);}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);border:1px solid rgba(8,24,38,.1);}
+.cal-dh{background:var(--navy);padding:.6rem .4rem;text-align:center;font-size:.54rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(247,250,252,.5);}
+.cal-cell{background:#fff;border-right:1px solid rgba(8,24,38,.06);border-bottom:1px solid rgba(8,24,38,.06);padding:.65rem .55rem;min-height:88px;position:relative;}
+.cal-cell.empty{background:#f8f9fb;}
+.cal-cell.today{background:rgba(79,209,232,.04);outline:2px solid rgba(79,209,232,.3);outline-offset:-2px;}
+.cal-num{font-size:.7rem;font-weight:500;color:rgba(79,79,79,.45);margin-bottom:.35rem;}
+.cal-cell.today .cal-num{color:var(--ocean);font-weight:700;}
+.cal-ev{display:flex;align-items:flex-start;gap:.28rem;margin-bottom:.28rem;}
+.ev-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:2px;}
+.ev-dot.run{background:var(--ocean);}
+.ev-dot.loc{background:#1e6b2a;}
+.ev-txt{font-size:.6rem;font-weight:600;line-height:1.2;color:var(--navy);}
+.ev-txt.green{color:#155220;}
+.ev-note{font-size:.5rem;color:var(--ocean);font-weight:700;margin-top:.15rem;line-height:1.2;}
+.cal-legend{display:flex;gap:2rem;flex-wrap:wrap;margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(8,24,38,.08);}
+.leg-item{display:flex;align-items:center;gap:.5rem;font-size:.63rem;font-weight:500;color:var(--graphite);}
+
+/* ── DIRECTORIO ── */
+#directorio{background:var(--navy);}
+.df-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:2.5rem;}
+.df{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.45rem 1.15rem;border-radius:100px;border:1px solid rgba(247,250,252,.1);color:rgba(247,250,252,.38);background:transparent;transition:all .22s var(--ease);}
+.df.on,.df:hover{background:var(--aqua);color:var(--navy);border-color:var(--aqua);}
+.dir-g{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(247,250,252,.04);}
+.dc{background:var(--navy);padding:2.2rem;transition:background .3s var(--ease);position:relative;overflow:hidden;}
+.dc.hidden{display:none;}
+.dc:hover{background:rgba(14,90,138,.14);}
+.dc::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--aqua),var(--cyan));transition:width .5s var(--ease);}
+.dc:hover::after{width:100%;}
+.dc-top{display:flex;align-items:center;gap:.9rem;margin-bottom:1rem;}
+.dc-av{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:var(--f-d);font-size:.95rem;font-weight:800;flex-shrink:0;}
+.dc-name{font-size:.92rem;font-weight:600;color:var(--white);margin-bottom:.15rem;}
+.dc-spec{font-size:.57rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--aqua);}
+.dc-tags{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.9rem;}
+.dc-tag{font-size:.52rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:.18rem .55rem;border-radius:100px;border:1px solid rgba(79,209,232,.2);color:rgba(79,209,232,.65);background:rgba(79,209,232,.05);}
+.dc-bio{font-size:.78rem;line-height:1.6;color:rgba(247,250,252,.38);margin-bottom:.9rem;}
+.dc-stars{display:flex;align-items:center;gap:.22rem;margin-bottom:.9rem;}
+.dstar{color:var(--aqua);font-size:.7rem;}
+.dc-meta{font-size:.62rem;color:rgba(247,250,252,.22);margin-left:.18rem;}
+.dc-btns{display:flex;gap:.4rem;}
+.dc-loc{font-size:.62rem;color:rgba(247,250,252,.3);margin-bottom:.85rem;}
+.db{font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.4rem .9rem;border-radius:100px;border:1px solid rgba(247,250,252,.12);color:rgba(247,250,252,.45);transition:all .2s;}
+.db:hover{border-color:var(--aqua);color:var(--aqua);}
+.db.wa:hover{border-color:#25D366;color:#25D366;}
+
+/* ── LEADERBOARD ── */
+#leaderboard{background:#F7FAFC;position:relative;overflow:hidden;}
+#leaderboard::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 80% 20%,rgba(14,90,138,.05) 0%,transparent 60%);pointer-events:none;}
+.lb-note{font-size:.7rem;color:rgba(8,24,38,.4);margin-bottom:2.5rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;}
+.lb-note a{color:var(--ocean);text-decoration:underline;}
+.lb-cath{font-family:var(--f-d);font-weight:700;font-size:.95rem;letter-spacing:-.01em;color:var(--aqua);margin-bottom:.85rem;}
+/* ── STRAVA WIDGETS ── */
+.strava-badge{display:inline-flex;align-items:center;gap:.5rem;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#FC4C02;border:1px solid rgba(252,76,2,.3);border-radius:100px;padding:.42rem 1rem;transition:all .2s;}
+.strava-badge:hover{background:#FC4C02;color:var(--white);}
+
+.live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--aqua);box-shadow:0 0 0 0 rgba(79,209,232,.4);animation:livepulse 2s ease-in-out infinite;flex-shrink:0;}
+@keyframes livepulse{0%{box-shadow:0 0 0 0 rgba(79,209,232,.4)}70%{box-shadow:0 0 0 8px rgba(79,209,232,0)}100%{box-shadow:0 0 0 0 rgba(79,209,232,0)}}
+
+.strava-layout{display:flex;flex-direction:column;gap:1.5rem;position:relative;z-index:1;align-items:center;}
+
+/* Widget cards */
+.strava-widgets{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;width:100%;max-width:740px;}
+.sw-card{background:#fff;border:1px solid rgba(8,24,38,.08);padding:1.75rem;box-shadow:0 4px 24px rgba(8,24,38,.06);}
+.sw-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;}
+.sw-card-label{font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(8,24,38,.5);}
+.sw-live-pill{display:inline-flex;align-items:center;gap:.4rem;font-size:.55rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ocean);background:rgba(14,90,138,.08);border:1px solid rgba(14,90,138,.18);border-radius:100px;padding:.2rem .6rem;}
+
+/* iframe wrappers — scale Strava's fixed-width iframes to fill our card */
+.sw-frame-wrap{width:100%;overflow:hidden;border-radius:4px;position:relative;}
+.sw-frame-wrap iframe{
+  width:300px;
+  transform-origin:top left;
+  display:block;
+  /* scale to fill the 292px available (card 340px - 2×1.75rem padding ≈ 292px) */
+  transform:scale(calc(360/300));
+  margin-bottom:calc((160px * (1 - 292/300)) * -1); /* collapse scaled whitespace */
+}
+.sw-frame-summary iframe{height:160px;margin-bottom:calc((160px * (1 - 360/300)) * -1);}
+.sw-frame-runs iframe{height:454px;margin-bottom:calc((454px * (1 - 360/300)) * -1);}
+
+/* Right side manual rankings */
+.strava-manual{background:rgba(8,24,38,.4);backdrop-filter:blur(8px);padding:2rem 2.25rem;display:flex;flex-direction:column;gap:1.75rem;}
+.sm-header{display:flex;align-items:center;justify-content:space-between;padding-bottom:1.25rem;border-bottom:1px solid rgba(247,250,252,.07);}
+.sm-update{font-size:.56rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(247,250,252,.2);}
+.lb-cat-v2{display:flex;flex-direction:column;gap:0;}
+.lb-cat-v2 .lb-cath{font-family:var(--f-d);font-weight:700;font-size:.88rem;letter-spacing:-.01em;color:var(--aqua);margin-bottom:.75rem;}
+
+@media(max-width:700px){.strava-widgets{grid-template-columns:1fr;}}
+
+
+.lb-row{display:flex;align-items:center;gap:.85rem;padding:.72rem 0;border-bottom:1px solid rgba(247,250,252,.05);}
+.lb-row:last-child{border-bottom:none;}
+.lb-num{font-family:var(--f-d);font-weight:800;font-size:1.05rem;color:rgba(247,250,252,.1);min-width:24px;letter-spacing:-.02em;}
+.lb-num.g{color:var(--aqua);}
+.lb-av{width:34px;height:34px;border-radius:10px;background:rgba(79,209,232,.1);display:flex;align-items:center;justify-content:center;font-size:.58rem;font-weight:800;color:var(--aqua);flex-shrink:0;}
+.lb-info{flex:1;}.lb-name{font-size:.84rem;font-weight:500;color:var(--white);}
+.lb-sub{font-size:.58rem;color:rgba(247,250,252,.28);margin-top:.1rem;}
+.lb-val{font-family:var(--f-d);font-weight:700;font-size:.92rem;color:var(--aqua);white-space:nowrap;}
+
+/* ── HERRAMIENTAS ── */
+#herramientas{background:var(--navy);}
+
+/* Tool picker cards */
+.tool-picker{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(247,250,252,.05);margin-bottom:3px;}
+.tool-pick{background:rgba(247,250,252,.03);padding:1.75rem 1.5rem;cursor:none;transition:all .25s var(--ease);border:none;text-align:left;position:relative;overflow:hidden;}
+.tool-pick::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--aqua);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease);}
+.tool-pick.on{background:rgba(79,209,232,.07);}
+.tool-pick.on::after{transform:scaleX(1);}
+.tool-pick:hover{background:rgba(79,209,232,.05);}
+.tool-pick:hover::after{transform:scaleX(1);}
+.tp-icon{width:40px;height:40px;border-radius:10px;background:rgba(79,209,232,.1);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;transition:background .25s;}
+.tool-pick.on .tp-icon{background:rgba(79,209,232,.18);}
+.tp-name{font-family:var(--f-d);font-weight:800;font-size:1rem;letter-spacing:-.02em;color:var(--white);margin-bottom:.35rem;}
+.tp-desc{font-size:.72rem;line-height:1.5;color:rgba(247,250,252,.38);}
+.tool-pick.on .tp-name{color:var(--aqua);}
+
+/* Tool panels */
+.tp{display:none;}.tp.on{display:block;}
+
+/* Calculator layout: two columns on desktop */
+.tc-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(247,250,252,.05);}
+.tc-inputs{background:rgba(8,24,38,.6);backdrop-filter:blur(8px);padding:3rem;}
+.tc-output{background:rgba(14,90,138,.12);padding:3rem;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:300px;}
+
+/* Inputs */
+.tgrp{margin-bottom:2.2rem;}
+.tlbl{display:flex;justify-content:space-between;align-items:baseline;font-size:.56rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(247,250,252,.35);margin-bottom:.85rem;}
+.tlbl strong{font-size:1.05rem;font-weight:700;color:var(--white);letter-spacing:-.02em;text-transform:none;}
+input[type=range]{width:100%;appearance:none;height:2px;background:rgba(247,250,252,.12);outline:none;border-radius:0;cursor:none;}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;border-radius:50%;background:var(--aqua);cursor:none;box-shadow:0 0 0 4px rgba(79,209,232,.15);transition:box-shadow .2s;}
+input[type=range]::-webkit-slider-thumb:hover{box-shadow:0 0 0 8px rgba(79,209,232,.1);}
+select{width:100%;padding:.85rem 1rem;background:rgba(247,250,252,.05);border:1px solid rgba(247,250,252,.1);color:var(--white);font-family:var(--f-b);font-size:.88rem;outline:none;margin-top:.5rem;appearance:none;border-radius:0;}
+
+/* Output area */
+.to-label{font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,250,252,.3);margin-bottom:.75rem;}
+.to-val{font-family:var(--f-d);font-weight:900;font-size:clamp(3rem,7vw,5.5rem);letter-spacing:-.04em;color:var(--aqua);line-height:1;margin-bottom:.5rem;}
+.to-unit{font-size:.75rem;color:rgba(247,250,252,.3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:2.5rem;}
+.to-secondary{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;}
+.to-sec-item{text-align:center;}
+.to-sec-lbl{font-size:.54rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(247,250,252,.25);margin-bottom:.3rem;}
+.to-sec-val{font-family:var(--f-d);font-weight:700;font-size:1.4rem;letter-spacing:-.02em;color:rgba(247,250,252,.7);}
+
+/* HR Zones — inside output panel */
+.hz-list{width:100%;text-align:left;}
+.hz-row{display:flex;align-items:center;gap:.85rem;padding:.65rem 0;border-bottom:1px solid rgba(247,250,252,.05);}
+.hz-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.hz-n{flex:1;font-size:.78rem;font-weight:500;color:var(--white);}
+.hz-r{font-size:.74rem;color:rgba(247,250,252,.4);min-width:90px;text-align:right;}
+.hz-bg{width:70px;height:3px;background:rgba(247,250,252,.07);}
+.hz-fill{height:100%;}
+
+/* Splits list */
+.splits-list{width:100%;text-align:left;}
+.split-row{display:flex;align-items:center;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid rgba(247,250,252,.05);font-size:.82rem;}
+.split-row .sk{color:rgba(247,250,252,.4);font-size:.7rem;}
+.split-row .sv{font-family:var(--f-d);font-weight:700;color:var(--aqua);font-size:1rem;}
+
+@media(max-width:900px){
+  .tool-picker{grid-template-columns:repeat(2,1fr);}
+  .tc-wrap{grid-template-columns:1fr;}
+  .tc-output{min-height:auto;padding:2rem;}
+  .tool-pick{padding:1.25rem;}
+}
+@media(max-width:480px){
+  .tool-picker{grid-template-columns:1fr 1fr;}
+  .tc-inputs{padding:1.75rem;}
+}
+
+/* ── JOURNAL ── */
+#journal{padding-bottom:0;}
+.j-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:1px;background:rgba(247,250,252,.04);}
+.j-feat{background:rgba(14,90,138,.2);padding:3rem;display:flex;flex-direction:column;justify-content:flex-end;min-height:440px;position:relative;overflow:hidden;transition:background .4s;}
+.j-feat:hover{background:rgba(14,90,138,.32);}
+.j-feat-deco{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 25% 35%,rgba(79,209,232,.06) 0%,transparent 60%);}
+.j-sm{background:rgba(8,24,38,.4);padding:2rem;display:flex;flex-direction:column;justify-content:flex-end;min-height:146px;position:relative;border-bottom:1px solid rgba(247,250,252,.03);transition:background .3s;}
+.j-sm:hover{background:rgba(14,90,138,.18);}
+.j-col{display:flex;flex-direction:column;}
+.j-cat{font-size:.57rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--aqua);margin-bottom:.65rem;position:relative;z-index:1;}
+.j-title{font-family:var(--f-d);font-weight:900;letter-spacing:-.025em;line-height:1.1;color:var(--white);margin-bottom:.6rem;position:relative;z-index:1;}
+.j-title.big{font-size:1.6rem;}
+.j-title.sm{font-size:.95rem;}
+.j-meta{font-size:.62rem;color:rgba(247,250,252,.28);position:relative;z-index:1;}
+.j-read{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.2rem;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--aqua);border-bottom:1px solid var(--aqua);padding-bottom:2px;transition:gap .2s;position:relative;z-index:1;}
+.j-feat:hover .j-read{gap:.85rem;}
+.j-loading{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:.75rem;padding:5rem;color:rgba(247,250,252,.3);font-size:.85rem;}
+.j-spin{width:20px;height:20px;border:2px solid rgba(79,209,232,.15);border-top-color:var(--aqua);border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.j-cta{margin-top:1px;background:rgba(14,90,138,.08);border-top:1px solid rgba(79,209,232,.07);padding:1.75rem 3rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;}
+.j-cta-txt{font-size:.8rem;color:rgba(247,250,252,.38);}
+.j-cta-txt a{color:var(--aqua);text-decoration:underline;}
+
+footer{background:#030d15;padding:6rem 4rem 2.5rem;border-top:1px solid rgba(79,209,232,.06);}
+.ft{display:grid;grid-template-columns:1.8fr 1fr 1fr 1.5fr;gap:3rem;padding-bottom:4rem;border-bottom:1px solid rgba(247,250,252,.05);margin-bottom:2rem;}
+.ft-logo{font-family:var(--f-d);font-weight:900;font-size:1.4rem;letter-spacing:-.03em;margin-bottom:.65rem;display:flex;align-items:center;gap:.4rem;}
+.ft-tag{font-size:.8rem;color:rgba(247,250,252,.22);line-height:1.65;margin-bottom:1.7rem;}
+.ft-soc{display:flex;gap:.55rem;}
+.fts{width:36px;height:36px;border-radius:10px;border:1px solid rgba(247,250,252,.1);display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:800;color:rgba(247,250,252,.35);transition:all .2s;}
+.fts:hover{background:var(--aqua);color:var(--navy);border-color:var(--aqua);}
+.ft-ch{font-size:.57rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--aqua);margin-bottom:1.2rem;}
+.ft-ul{list-style:none;display:flex;flex-direction:column;gap:.6rem;}
+.ft-ul a{font-size:.8rem;color:rgba(247,250,252,.28);transition:color .2s;}
+.ft-ul a:hover{color:var(--aqua);}
+.nl{display:flex;flex-direction:column;gap:.5rem;}
+.nl-p{font-size:.7rem;color:rgba(247,250,252,.22);line-height:1.6;margin-bottom:.5rem;}
+.nl input{background:rgba(247,250,252,.04);border:1px solid rgba(247,250,252,.08);padding:.7rem 1rem;color:var(--white);font-family:var(--f-b);font-size:.8rem;outline:none;transition:border-color .2s;}
+.nl input::placeholder{color:rgba(247,250,252,.2);}
+.nl input:focus{border-color:var(--aqua);}
+.nl button{background:var(--aqua);color:var(--navy);padding:.7rem;font-family:var(--f-b);font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;transition:background .2s;}
+.nl button:hover{background:var(--cyan);}
+.ft-bot{display:flex;justify-content:space-between;align-items:center;}
+.ft-copy{font-size:.68rem;color:rgba(247,250,252,.14);}
+.ft-quote{font-size:.75rem;color:rgba(247,250,252,.14);font-style:italic;}
+
+@media(max-width:1024px){
+  .dir-g{grid-template-columns:repeat(2,1fr);}
+  .j-grid{grid-template-columns:1fr 1fr;}
+  .j-col:last-child{display:none;}
+}
+@media(max-width:900px){
+  nav{padding:1.2rem 1.5rem;}nav.solid{padding:.9rem 1.5rem;}
+  .nav-links,.nav-pill{display:none;}.nav-mob{display:flex;}
+  section{padding:5rem 1.5rem;}
+  .hero{padding:0 1.5rem;}
+  .hero-body{padding-top:6rem;}
+  h1.hero-h1{font-size:clamp(2.8rem,12vw,5rem);}
+  .hero-foot{flex-direction:column;align-items:flex-start;}
+  .hero-btns{flex-direction:column;width:100%;}
+  .btn-s,.btn-o{text-align:center;width:100%;}
+  .stats-strip{margin:0 -1.5rem;flex-wrap:wrap;}
+  .si{min-width:50%;border-bottom:1px solid rgba(79,209,232,.07);}
+  .cal-cell{min-height:60px;padding:.4rem;}
+  .ev-txt{font-size:.52rem;}
+  .dir-g,.lb-g{grid-template-columns:1fr;}
+  .j-grid{grid-template-columns:1fr;}
+  .ft{grid-template-columns:1fr 1fr;gap:2rem;}
+  .ft-bot{flex-direction:column;gap:.7rem;text-align:center;}
+  .tw{padding:2rem 1.5rem;}
+  body{cursor:auto;}#cur,#cur-ring{display:none;}
+  h2.sh{font-size:clamp(2rem,9vw,3rem);}
+}
+@media(max-width:560px){
+  .cal-dh{font-size:.44rem;padding:.4rem .2rem;}
+  .ev-txt{font-size:.46rem;}
+  .ft{grid-template-columns:1fr;}
+  .cal-cell{min-height:52px;}
+}
+
+/* COMUNIDAD */
+.comm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(247,250,252,.05);}
+.comm-card{background:rgba(247,250,252,.03);padding:3.5rem 3rem;display:flex;flex-direction:column;align-items:center;text-align:center;transition:background .3s var(--ease);position:relative;overflow:hidden;border:1px solid rgba(247,250,252,.05);}
+.comm-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .4s var(--ease);}
+.comm-card:hover{background:rgba(247,250,252,.06);}
+.comm-card:hover::before{opacity:1;}
+.comm-icon-wrap{width:90px;height:90px;border-radius:24px;display:flex;align-items:center;justify-content:center;margin-bottom:2rem;transition:transform .3s var(--ease),box-shadow .3s var(--ease);}
+.comm-card:hover .comm-icon-wrap{transform:translateY(-6px) scale(1.05);box-shadow:0 20px 50px rgba(0,0,0,.4);}
+.comm-label{font-family:var(--f-d);font-weight:900;font-size:1.6rem;letter-spacing:-.03em;color:var(--white);margin-bottom:.4rem;}
+.comm-handle{font-size:.72rem;font-weight:600;letter-spacing:.1em;color:var(--aqua);text-transform:uppercase;margin-bottom:1.2rem;}
+.comm-desc{font-size:.85rem;line-height:1.65;color:rgba(247,250,252,.4);max-width:260px;margin-bottom:2rem;flex:1;}
+.comm-cta{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--white);display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1.5rem;border:1px solid rgba(247,250,252,.15);border-radius:100px;transition:all .25s var(--ease);}
+.comm-cta span{transition:transform .25s var(--ease);}
+.comm-card:hover .comm-cta{border-color:var(--aqua);color:var(--aqua);}
+.comm-card:hover .comm-cta span{transform:translateX(4px);}
+@media(max-width:900px){.comm-grid{grid-template-columns:1fr;}.comm-card{padding:3rem 2rem;}}
+
+/* Logo image */
+.logo-img{height:36px;width:auto;display:block;object-fit:contain;}
+nav .logo-img{height:36px;}
+.ft-logo .logo-img{height:40px;margin-bottom:.75rem;}
+
+/* Hero isotipo watermark */
+.hero-iso{
+  position:absolute;
+  right:-4%;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:3;
+  width:min(55vw,600px);
+  opacity:.12;
+  pointer-events:none;
+  user-select:none;
+}
+.hero-iso img{width:100%;height:auto;display:block;}
+@media(max-width:900px){
+  .hero-iso{width:80vw;right:-10%;opacity:.08;}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<nav id="nav">
+  <a href="#" class="nav-logo"><img src="https://i.ibb.co/G3V1MRGg/Letras-Logo-White.png" alt="Caco Runners" class="logo-img"></a>
+  <ul class="nav-links">
+    <li><a href="#inicio">Inicio</a></li>
+    <li><a href="#calendario">Calendario</a></li>
+    <li><a href="#directorio">Directorio</a></li>
+    <li><a href="#leaderboard">Ranking</a></li>
+    <li><a href="#herramientas">Herramientas</a></li>
+    <li><a href="#comunidad">Comunidad</a></li>
+  </ul>
+  <a href="#" class="nav-pill">Únete</a>
+  <div class="nav-mob"><svg width="22" height="14" viewBox="0 0 22 14" fill="none"><rect width="22" height="1.5" fill="rgba(247,250,252,.7)"/><rect y="6" width="16" height="1.5" fill="rgba(247,250,252,.7)"/><rect y="12" width="10" height="1.5" fill="rgba(247,250,252,.7)"/></svg></div>
+</nav>
+
+<section class="hero" id="inicio">
+  <!-- Vimeo background video -->
+  <div class="hero-video-wrap">
+    <iframe
+      id="hero-vimeo"
+      src="https://player.vimeo.com/video/1198207125?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1&autopause=0&quality=auto"
+      frameborder="0"
+      allow="autoplay; fullscreen"
+      allowfullscreen
+    ></iframe>
+  </div>
+  <div class="hero-video-overlay"></div>
+  <!-- Keep subtle grid on top for texture -->
+  <div class="hero-grid-bg"></div>
+  <div class="hero-iso"><img src="https://i.ibb.co/8gp02srT/Mni-Iso-Logo-White.png" alt=""></div>
+  <div class="hero-body">
+    <h1 class="hero-h1">Running<br><span class="ac">together,</span><br><span class="ol">we thrive.</span></h1>
+    <div class="hero-foot">
+      <p class="hero-sub">La comunidad premium de running y endurance de Cap Cana. Enfocados en <b>rendimiento, bienestar y estilo de vida</b>.</p>
+      <div class="hero-btns">
+        <a href="#" class="btn-s">Únete a la comunidad</a>
+        <a href="#calendario" class="btn-o">Ver calendario</a>
+      </div>
+    </div>
+  </div>
+  <div class="stats-strip">
+    <div class="si"><div class="sn">197<sup>+</sup></div><div class="sl">Miembros Activos</div></div>
+    <div class="si"><div class="sn">3<sup>x</sup></div><div class="sl">Carreras Semanales</div></div>
+    <div class="si"><div class="sn">339</div><div class="sl">Kilómetros Este Mes</div></div>
+    <div class="si"><div class="sn">∞</div><div class="sl">Risas en Entreno</div></div>
+  </div>
+</section>
+
+<!-- CALENDARIO MAYO 2025 -->
+<section id="calendario">
+  <div class="rv">
+    <div class="lbl dk">Entrenamiento</div>
+    <div class="cal-header">
+      <div>
+        <h2 class="sh dk">Calendario<br><span style="color:var(--ocean)">Mayo 2025</span></h2>
+        <p class="sub dk" style="margin-bottom:0">Puntos de encuentro y rutas del mes.</p>
+      </div>
+      <a href="https://www.strava.com/clubs/1343224" target="_blank" class="cal-strava-link">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Ver en Strava
+      </a>
+    </div>
+    <div class="cal-grid">
+      <div class="cal-dh">Lun</div><div class="cal-dh">Mar</div><div class="cal-dh">Mié</div><div class="cal-dh">Jue</div><div class="cal-dh">Vie</div><div class="cal-dh">Sáb</div><div class="cal-dh">Dom</div>
+      <!-- Semana 1 -->
+      <div class="cal-cell empty"></div><div class="cal-cell empty"></div><div class="cal-cell empty"></div><div class="cal-cell empty"></div>
+      <div class="cal-cell"><div class="cal-num">1</div></div>
+      <div class="cal-cell"><div class="cal-num">2</div><div class="cal-ev"><div class="ev-dot loc"></div><div class="ev-txt green">Cap Cana</div></div></div>
+      <div class="cal-cell"><div class="cal-num">3</div></div>
+      <!-- Semana 2 -->
+      <div class="cal-cell"><div class="cal-num">4</div><div class="cal-ev"><div class="ev-dot run"></div><div class="ev-txt">Village</div></div></div>
+      <div class="cal-cell"><div class="cal-num">5</div></div>
+      <div class="cal-cell"><div class="cal-num">6</div><div class="cal-ev"><div class="ev-dot run"></div><div class="ev-txt">Las Canas BDI</div></div></div>
+      <div class="cal-cell"><div class="cal-num">7</div></div>
+      <div class="cal-cell"><div class="cal-num">8</div></div>
+      <div class="cal-cell"><div class="cal-num">9</div><div class="cal-ev"><div class="ev-dot loc"></div><div class="ev-txt green">Vista Cana</div></div></div>
+      <div class="cal-cell"><div class="cal-num">10</div></div>
+      <!-- Semana 3 -->
+      <div class="cal-cell"><div class="cal-num">11</div><div class="cal-ev"><div class="ev-dot run"></div><div class="ev-txt">Village</div></div></div>
+      <div class="cal-cell"><div class="cal-num">12</div></div>
+      <div class="cal-cell"><div class="cal-num">13</div><div class="cal-ev"><div class="ev-dot run"></div><div class="ev-txt">Las Canas BDI</div></div></div>
+      <div class="cal-cell"><div class="cal-num">14</div></div>
+      <div class="cal-cell"><div class="cal-num">15</div></div>
+      <div class="cal-cell today"><div class="cal-num">16</div><div class="cal-ev"><div class="ev-dot loc"></div><div class="ev-txt green">Cap Cana</div></div><div class="ev-note">Día previo Ironman</div></div>
+      <div class="cal-cell"><div class="cal-num">17</div></div>
+      <!-- Semana 4 -->
+      <div class="cal-cell"><div class="cal-num">18</div><div class="cal-ev"><div class="ev-dot run"></div><div class="ev-txt">Village</div></div></div>
+      <div class="cal-cell"><div class="cal-num">19</div></div>
+      <div class="cal-cell"><div class="cal-num">20</div><div class="cal-ev"><div class="ev-dot run"></div><div class="ev-txt">Sanctuary Town</div></div></div>
+      <div class="cal-cell"><div class="cal-num">21</div></div>
+      <div class="cal-cell"><div class="cal-num">22</div></div>
+      <div class="cal-cell"><div class="cal-num">23</div><div class="cal-ev"><div class="ev-dot loc"></div><div class="ev-txt green">Cocotal</div></div></div>
+      <div class="cal-cell"><div class="cal-num">24</div></div>
+      <!-- Semana 5 -->
+      <div class="cal-cell"><div class="cal-num">25</div><div class="cal-ev"><div class="ev-dot run"></div><div class="ev-txt">Village</div></div></div>
+      <div class="cal-cell"><div class="cal-num">26</div></div>
+      <div class="cal-cell"><div class="cal-num">27</div><div class="cal-ev"><div class="ev-dot run"></div><div class="ev-txt">Green Village</div></div></div>
+      <div class="cal-cell"><div class="cal-num">28</div></div>
+      <div class="cal-cell"><div class="cal-num">29</div></div>
+      <div class="cal-cell"><div class="cal-num">30</div><div class="cal-ev"><div class="ev-dot loc"></div><div class="ev-txt green">Vista Cana</div></div></div>
+      <div class="cal-cell"><div class="cal-num">31</div></div>
+    </div>
+    <div class="cal-legend">
+      <div class="leg-item"><div style="width:10px;height:10px;border-radius:50%;background:var(--ocean);flex-shrink:0;"></div>Lunes &amp; Miércoles — Village / Rutas Especiales</div>
+      <div class="leg-item"><div style="width:10px;height:10px;border-radius:50%;background:#1e6b2a;flex-shrink:0;"></div>Sábados — Rutas Especiales con Ubicación</div>
+    </div>
+  </div>
+</section>
+
+<!-- DIRECTORIO -->
+<section id="directorio">
+  <div class="rv">
+    <div class="lbl">Comunidad</div>
+    <h2 class="sh">Directorio de<br>Rendimiento</h2>
+    <p class="sub">Profesionales curados del deporte y bienestar. Acceso exclusivo para la comunidad Caco Runners.</p>
+    <div class="df-row" id="dir-filters">
+      <button class="df on" data-filter="all">Todos</button>
+      <button class="df" data-filter="coach">Coaches</button>
+      <button class="df" data-filter="fisio">Fisioterapeutas</button>
+      <button class="df" data-filter="centro">Centros de Estudios</button>
+    </div>
+  </div>
+  <div class="dir-g rv d1">
+
+    <!-- 1. Cata Pedraza – Go Run Lab -->
+    <div class="dc" data-cat="centro">
+      <div class="dc-top">
+        <div class="dc-av" style="background:linear-gradient(135deg,rgba(79,209,232,.22),rgba(14,90,138,.45));color:var(--aqua);">CP</div>
+        <div><div class="dc-name">Cata Pedraza</div><div class="dc-spec">Go Run Lab · Sport Scientist</div></div>
+      </div>
+      <div class="dc-tags"><span class="dc-tag">Biomecánica</span><span class="dc-tag">Análisis de Pisada</span><span class="dc-tag">Prueba de Marcha</span></div>
+      <p class="dc-bio">Científica del deporte especializada en análisis biomecánico y de pisada. Referente en optimización del movimiento para corredores en Santo Domingo.</p>
+      <div class="dc-loc">📍 Santo Domingo</div>
+      <div class="dc-btns"><a href="https://wa.me/18295391661" target="_blank" class="db wa">WhatsApp</a></div>
+    </div>
+
+    <!-- 2. Dasha Mendoza -->
+    <div class="dc" data-cat="coach">
+      <div class="dc-top">
+        <div class="dc-av" style="background:linear-gradient(135deg,rgba(255,179,123,.2),rgba(180,80,20,.35));color:var(--sunset);">DM</div>
+        <div><div class="dc-name">Dasha Mendoza</div><div class="dc-spec">Coach · Fisioterapeuta</div></div>
+      </div>
+      <div class="dc-tags"><span class="dc-tag">Maratón</span><span class="dc-tag">Triatlón</span><span class="dc-tag">Punción Seca</span><span class="dc-tag">Masajes Descarga</span></div>
+      <p class="dc-bio">Coach de maratón y triatlón con formación en fisioterapia. Combina entrenamiento y terapia en un solo perfil. Ubicada en Punta Cana Village.</p>
+      <div class="dc-loc">📍 Punta Cana Village</div>
+      <div class="dc-btns"><a href="https://wa.me/18495336283" target="_blank" class="db wa">WhatsApp</a></div>
+    </div>
+
+    <!-- 3. Miguel Arzeno -->
+    <div class="dc" data-cat="fisio">
+      <div class="dc-top">
+        <div class="dc-av" style="background:linear-gradient(135deg,rgba(94,235,255,.14),rgba(8,24,38,.6));color:var(--cyan);">MA</div>
+        <div><div class="dc-name">Miguel Arzeno, MD.</div><div class="dc-spec">Manual Therapist</div></div>
+      </div>
+      <div class="dc-tags"><span class="dc-tag">Descargas</span><span class="dc-tag">Descontracturas</span><span class="dc-tag">Terapia Manual</span></div>
+      <p class="dc-bio">Médico especializado en terapia manual. Tratamientos de descarga y descontractura muscular para atletas en Punta Cana y Cap Cana.</p>
+      <div class="dc-loc">📍 Punta Cana · Cap Cana</div>
+      <div class="dc-btns"><a href="https://wa.me/18092068334" target="_blank" class="db wa">WhatsApp</a></div>
+    </div>
+
+    <!-- 4. Miquel Roig – American Clinic Group -->
+    <div class="dc" data-cat="fisio">
+      <div class="dc-top">
+        <div class="dc-av" style="background:linear-gradient(135deg,rgba(79,209,232,.18),rgba(8,24,38,.55));color:var(--aqua);">MR</div>
+        <div><div class="dc-name">Miquel Roig</div><div class="dc-spec">American Clinic Group · Fisioterapeuta</div></div>
+      </div>
+      <div class="dc-tags"><span class="dc-tag">Fisioterapia</span><span class="dc-tag">Magnetoterapia</span><span class="dc-tag">Rehabilitación</span></div>
+      <p class="dc-bio">Fisioterapeuta del American Clinic Group en Bávaro. Tratamientos con magnetoterapia y rehabilitación física especializada para deportistas.</p>
+      <div class="dc-loc">📍 Boulevard Center, Bávaro, Punta Cana</div>
+      <div class="dc-btns"><a href="https://wa.me/18098319429" target="_blank" class="db wa">WhatsApp</a></div>
+    </div>
+
+    <!-- 5. FisioSalud 360 -->
+    <div class="dc" data-cat="centro">
+      <div class="dc-top">
+        <div class="dc-av" style="background:linear-gradient(135deg,rgba(79,209,232,.22),rgba(14,90,138,.45));color:var(--aqua);">FS</div>
+        <div><div class="dc-name">FisioSalud 360</div><div class="dc-spec">Centro de Rehabilitación</div></div>
+      </div>
+      <div class="dc-tags"><span class="dc-tag">Rehabilitación</span><span class="dc-tag">Terapia Física</span><span class="dc-tag">Salud</span></div>
+      <p class="dc-bio">Centro de rehabilitación y terapia física en Santo Domingo. Atención del Dr. De la Rosa con enfoque integral en recuperación deportiva.</p>
+      <div class="dc-loc">📍 Santo Domingo</div>
+      <div class="dc-btns"><a href="https://wa.me/18296360076" target="_blank" class="db wa">WhatsApp</a></div>
+    </div>
+
+    <!-- 6. FISIODOCTORS -->
+    <div class="dc" data-cat="centro">
+      <div class="dc-top">
+        <div class="dc-av" style="background:linear-gradient(135deg,rgba(94,235,255,.14),rgba(14,90,138,.3));color:var(--cyan);">FD</div>
+        <div><div class="dc-name">FISIODOCTORS</div><div class="dc-spec">Terapia Física · Rehabilitación</div></div>
+      </div>
+      <div class="dc-tags"><span class="dc-tag">Terapia Física</span><span class="dc-tag">Rehabilitación</span><span class="dc-tag">Rendimiento</span></div>
+      <p class="dc-bio">Centro de terapias físicas y rehabilitación en Punta Cana. Atención del Dr. George Rodriguez con enfoque en recuperación de atletas.</p>
+      <div class="dc-loc">📍 Punta Cana</div>
+      <div class="dc-btns"><a href="https://wa.me/18494574007" target="_blank" class="db wa">WhatsApp</a></div>
+    </div>
+
+    <!-- 7. REHABILITEK -->
+    <div class="dc" data-cat="centro">
+      <div class="dc-top">
+        <div class="dc-av" style="background:linear-gradient(135deg,rgba(255,179,123,.2),rgba(180,80,20,.35));color:var(--sunset);">RH</div>
+        <div><div class="dc-name">REHABILITEK</div><div class="dc-spec">Rehabilitación · Terapia Física</div></div>
+      </div>
+      <div class="dc-tags"><span class="dc-tag">Rehabilitación</span><span class="dc-tag">Terapia Física</span><span class="dc-tag">Salud</span></div>
+      <p class="dc-bio">Centro de rehabilitación dirigido por la Dra. Isabella Núñez. Ubicado en Ensanche Serrallés, ofrece terapias físicas integrales para deportistas.</p>
+      <div class="dc-loc">📍 Av. Fantino Falco #64, Serrallés, Santo Domingo</div>
+      <div class="dc-btns"><a href="mailto:dra.isabellanunez@gmail.com" class="db">Email</a><a href="https://wa.me/18296810002" target="_blank" class="db wa">WhatsApp</a></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- LEADERBOARD -->
+<section id="leaderboard">
+  <div class="rv" style="position:relative;z-index:1;">
+    <div class="lbl dk">Rankings · En Vivo</div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;margin-bottom:.5rem;">
+      <h2 class="sh dk">Ranking de<br>la Comunidad</h2>
+      <a href="https://www.strava.com/clubs/1343224" target="_blank" class="strava-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"/></svg>
+        Ver Club en Strava
+      </a>
+    </div>
+    <p class="lb-note">
+      <span class="live-dot"></span>
+      Datos en tiempo real desde Strava · Se actualizan automáticamente cada semana.
+    </p>
+  </div>
+
+  <!-- Strava widgets + static layout -->
+  <div class="strava-layout rv d1">
+
+    <!-- LEFT: Strava live widgets -->
+    <div class="strava-widgets">
+      <!-- Summary widget -->
+      <div class="sw-card">
+        <div class="sw-card-header">
+          <div class="sw-card-label">Resumen Esta Semana</div>
+          <span class="sw-live-pill"><span class="live-dot"></span>En vivo</span>
+        </div>
+        <div class="sw-frame-wrap sw-frame-summary">
+          <iframe
+            allowtransparency="true"
+            frameborder="0"
+            scrolling="no"
+            src="https://www.strava.com/clubs/1343224/latest-rides/f7c47f4caa0430c5f27fec1b168f628b9bc782b5?show_rides=false"
+            title="Resumen semanal Caco Runners en Strava"
+          ></iframe>
+        </div>
+      </div>
+
+      <!-- Latest runs widget -->
+      <div class="sw-card">
+        <div class="sw-card-header">
+          <div class="sw-card-label">Últimas Actividades</div>
+          <span class="sw-live-pill"><span class="live-dot"></span>En vivo</span>
+        </div>
+        <div class="sw-frame-wrap sw-frame-runs">
+          <iframe
+            allowtransparency="true"
+            frameborder="0"
+            scrolling="no"
+            src="https://www.strava.com/clubs/1343224/latest-rides/f7c47f4caa0430c5f27fec1b168f628b9bc782b5?show_rides=true"
+            title="Últimas carreras Caco Runners en Strava"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+</section>
+
+<!-- HERRAMIENTAS -->
+<section id="herramientas" style="padding-bottom:0;">
+  <div class="rv" style="padding:8rem 4rem 3rem;text-align:center;">
+    <div class="lbl" style="justify-content:center;">Utilidades</div>
+    <h2 class="sh" style="text-align:center;">Herramientas<br>del Corredor</h2>
+    <p class="sub" style="text-align:center;margin:1rem auto 3rem;max-width:480px;color:rgba(247,250,252,.42);">Calculadoras diseñadas para corredores serios. Ajusta los controles y obtén tu resultado al instante.</p>
+  </div>
+
+  <!-- Tool picker -->
+  <div class="tool-picker rv" style="margin:0 4rem 3px;">
+    <button class="tool-pick on" onclick="switchT(this,'pace')">
+      <div class="tp-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4FD1E8" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="tp-name">Calculadora de Ritmo</div>
+      <div class="tp-desc">Ingresa distancia y ritmo para calcular tu tiempo final de carrera.</div>
+    </button>
+    <button class="tool-pick" onclick="switchT(this,'hr')">
+      <div class="tp-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4FD1E8" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </div>
+      <div class="tp-name">Zonas de Frecuencia Cardíaca</div>
+      <div class="tp-desc">Calcula tus 5 zonas de entrenamiento según tu edad y FC en reposo.</div>
+    </button>
+    <button class="tool-pick" onclick="switchT(this,'race')">
+      <div class="tp-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4FD1E8" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <div class="tp-name">Predictor de Carrera</div>
+      <div class="tp-desc">Predice tu tiempo en maratón o medio maratón a partir de una carrera reciente.</div>
+    </button>
+    <button class="tool-pick" onclick="switchT(this,'splits')">
+      <div class="tp-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4FD1E8" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      </div>
+      <div class="tp-name">Calculadora de Splits</div>
+      <div class="tp-desc">Divide tu carrera en fracciones iguales para mantener un ritmo constante.</div>
+    </button>
+  </div>
+
+  <!-- PACE -->
+  <div id="tool-pace" class="tp on rv d1" style="margin:0 4rem;">
+    <div class="tc-wrap">
+      <div class="tc-inputs">
+        <div class="tgrp">
+          <div class="tlbl">Distancia <strong id="dv">10 km</strong></div>
+          <input type="range" id="ds" min="1" max="42.2" value="10" step="0.5" oninput="cPace()">
+          <div style="display:flex;justify-content:space-between;margin-top:.4rem;font-size:.58rem;color:rgba(247,250,252,.2);">
+            <span>1 km</span><span>10 km</span><span>21.1 km</span><span>42.2 km</span>
+          </div>
+        </div>
+        <div class="tgrp">
+          <div class="tlbl">Ritmo (min/km) <strong id="pv">5:30 /km</strong></div>
+          <input type="range" id="ps" min="3" max="10" value="5.5" step="0.05" oninput="cPace()">
+          <div style="display:flex;justify-content:space-between;margin-top:.4rem;font-size:.58rem;color:rgba(247,250,252,.2);">
+            <span>3:00</span><span>5:00</span><span>7:30</span><span>10:00</span>
+          </div>
+        </div>
+      </div>
+      <div class="tc-output">
+        <div class="to-label">Tiempo total de carrera</div>
+        <div class="to-val" id="tv">55:00</div>
+        <div class="to-unit">horas : minutos : segundos</div>
+        <div class="to-secondary">
+          <div class="to-sec-item"><div class="to-sec-lbl">Velocidad</div><div class="to-sec-val" id="sv">10.9 km/h</div></div>
+          <div class="to-sec-item"><div class="to-sec-lbl">Ritmo</div><div class="to-sec-val" id="pv2">5:30 /km</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HR ZONES -->
+  <div id="tool-hr" class="tp rv d1" style="margin:0 4rem;">
+    <div class="tc-wrap">
+      <div class="tc-inputs">
+        <div class="tgrp">
+          <div class="tlbl">Tu edad <strong id="agv">35 años</strong></div>
+          <input type="range" id="ags" min="18" max="70" value="35" oninput="cHR()">
+          <div style="display:flex;justify-content:space-between;margin-top:.4rem;font-size:.58rem;color:rgba(247,250,252,.2);"><span>18</span><span>35</span><span>50</span><span>70</span></div>
+        </div>
+        <div class="tgrp">
+          <div class="tlbl">FC en reposo <strong id="rsv">55 bpm</strong></div>
+          <input type="range" id="rss" min="40" max="90" value="55" oninput="cHR()">
+          <div style="display:flex;justify-content:space-between;margin-top:.4rem;font-size:.58rem;color:rgba(247,250,252,.2);"><span>40</span><span>55</span><span>70</span><span>90</span></div>
+        </div>
+        <div style="margin-top:1rem;padding:1rem;background:rgba(79,209,232,.05);border:1px solid rgba(79,209,232,.1);">
+          <div style="font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(247,250,252,.3);margin-bottom:.3rem;">FC Máxima estimada</div>
+          <div id="max-hr-display" style="font-family:var(--f-d);font-weight:900;font-size:1.8rem;color:var(--aqua);letter-spacing:-.03em;">185 bpm</div>
+        </div>
+      </div>
+      <div class="tc-output" style="justify-content:flex-start;padding:2.5rem 2rem;">
+        <div class="to-label" style="margin-bottom:1.2rem;">Tus zonas de entrenamiento</div>
+        <div class="hz-list" id="hrz"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RACE PREDICTOR -->
+  <div id="tool-race" class="tp rv d1" style="margin:0 4rem;">
+    <div class="tc-wrap">
+      <div class="tc-inputs">
+        <div class="tgrp">
+          <div class="tlbl">Distancia conocida</div>
+          <select id="rd" onchange="cRace()">
+            <option value="5">5K — Carrera corta</option>
+            <option value="10" selected>10K — Carrera popular</option>
+            <option value="21.1">21.1K — Medio Maratón</option>
+            <option value="42.2">42.2K — Maratón</option>
+          </select>
+        </div>
+        <div class="tgrp">
+          <div class="tlbl">Tu tiempo en esa distancia <strong id="rtv">50:00</strong></div>
+          <input type="range" id="rts" min="15" max="360" value="50" oninput="cRace()">
+          <div style="display:flex;justify-content:space-between;margin-top:.4rem;font-size:.58rem;color:rgba(247,250,252,.2);"><span>15 min</span><span>1h</span><span>2h</span><span>6h</span></div>
+        </div>
+        <div style="margin-top:.5rem;padding:1rem;background:rgba(79,209,232,.05);border:1px solid rgba(79,209,232,.1);font-size:.72rem;color:rgba(247,250,252,.35);line-height:1.6;">
+          Basado en la <strong style="color:var(--aqua)">fórmula de Riegel</strong>: T₂ = T₁ × (D₂/D₁)^1.06. Ampliamente usada para predicciones de rendimiento en running.
+        </div>
+      </div>
+      <div class="tc-output">
+        <div class="to-label">Predicciones</div>
+        <div class="to-val" id="mpo" style="font-size:clamp(2rem,5vw,4rem);">3:40:00</div>
+        <div class="to-unit">Maratón predicho</div>
+        <div class="to-secondary">
+          <div class="to-sec-item"><div class="to-sec-lbl">Medio Maratón</div><div class="to-sec-val" id="hmo">1:45:00</div></div>
+          <div class="to-sec-item"><div class="to-sec-lbl">10K</div><div class="to-sec-val" id="tko">48:00</div></div>
+          <div class="to-sec-item"><div class="to-sec-lbl">5K</div><div class="to-sec-val" id="fko">23:00</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPLITS -->
+  <div id="tool-splits" class="tp rv d1" style="margin:0 4rem;">
+    <div class="tc-wrap">
+      <div class="tc-inputs">
+        <div class="tgrp">
+          <div class="tlbl">Distancia total <strong id="sdv">42.2 km</strong></div>
+          <input type="range" id="sds" min="5" max="42.2" value="42.2" step="0.1" oninput="cSplits()">
+          <div style="display:flex;justify-content:space-between;margin-top:.4rem;font-size:.58rem;color:rgba(247,250,252,.2);"><span>5K</span><span>10K</span><span>21K</span><span>42K</span></div>
+        </div>
+        <div class="tgrp">
+          <div class="tlbl">Tiempo objetivo <strong id="stv">3:30:00</strong></div>
+          <input type="range" id="sts" min="20" max="360" value="210" oninput="cSplits()">
+          <div style="display:flex;justify-content:space-between;margin-top:.4rem;font-size:.58rem;color:rgba(247,250,252,.2);"><span>20 min</span><span>1h</span><span>2h</span><span>6h</span></div>
+        </div>
+        <div class="tgrp">
+          <div class="tlbl">Mostrar split cada <strong id="sev">5 km</strong></div>
+          <input type="range" id="ses" min="1" max="10" value="5" step="1" oninput="cSplits()">
+          <div style="display:flex;justify-content:space-between;margin-top:.4rem;font-size:.58rem;color:rgba(247,250,252,.2);"><span>1 km</span><span>3 km</span><span>5 km</span><span>10 km</span></div>
+        </div>
+      </div>
+      <div class="tc-output" style="justify-content:flex-start;padding:2.5rem 2rem;overflow-y:auto;max-height:500px;">
+        <div class="to-label" style="margin-bottom:1.2rem;">Plan de carrera</div>
+        <div class="splits-list" id="sout"></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="height:8rem;"></div>
+</section>
+
+<!-- COMUNIDAD -->
+<section id="comunidad" style="background:var(--navy);padding:8rem 4rem;">
+  <div class="rv" style="text-align:center;margin-bottom:5rem;">
+    <div class="lbl" style="justify-content:center;">Únete</div>
+    <h2 class="sh" style="text-align:center;">Somos comunidad.<br><span style="color:var(--aqua)">Únete ahora.</span></h2>
+    <p class="sub" style="text-align:center;margin:1rem auto 0;max-width:420px;">Síguenos, únete al club y forma parte del grupo.</p>
+  </div>
+  <div class="comm-grid rv d1">
+
+    <a href="https://instagram.com/cacorunners" target="_blank" class="comm-card">
+      <div class="comm-icon-wrap" style="background:linear-gradient(135deg,#833AB4,#C13584,#E1306C,#F77737);">
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg>
+      </div>
+      <div class="comm-label">Instagram</div>
+      <div class="comm-handle">@cacorunners</div>
+      <div class="comm-desc">Fotos, videos y momentos de cada carrera. Síguenos para no perderte nada.</div>
+      <div class="comm-cta">Seguir <span>→</span></div>
+    </a>
+
+    <a href="https://www.strava.com/clubs/1343224" target="_blank" class="comm-card">
+      <div class="comm-icon-wrap" style="background:linear-gradient(135deg,#FC4C02,#e04000);">
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="white"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"/></svg>
+      </div>
+      <div class="comm-label">Strava</div>
+      <div class="comm-handle">Caco Runners Club</div>
+      <div class="comm-desc">Registra tus kilómetros, compite en el ranking y conecta con los atletas del club.</div>
+      <div class="comm-cta">Unirse al Club <span>→</span></div>
+    </a>
+
+    <a href="https://chat.whatsapp.com/GjNs5H4CxCd20LI0S21xWf?s=cl&p=i&ilr=2" target="_blank" class="comm-card">
+      <div class="comm-icon-wrap" style="background:linear-gradient(135deg,#25D366,#128C7E);">
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      </div>
+      <div class="comm-label">WhatsApp</div>
+      <div class="comm-handle">Grupo Caco Runners</div>
+      <div class="comm-desc">Coordina carreras, recibe avisos de última hora y chatea con la comunidad.</div>
+      <div class="comm-cta">Unirse al Grupo <span>→</span></div>
+    </a>
+
+  </div>
+</section>
+
+<footer>
+  <div class="ft">
+    <div>
+      <div class="ft-logo"><img src="https://i.ibb.co/G3V1MRGg/Letras-Logo-White.png" alt="Caco Runners" class="logo-img"></div>
+      <p class="ft-tag">Construido para corredores en Cap Cana.<br>Una comunidad que se mueve junta.</p>
+      <div class="ft-soc"><a href="#" class="fts">IG</a><a href="#" class="fts">WA</a><a href="https://www.strava.com/clubs/1343224" target="_blank" class="fts">ST</a><a href="#" class="fts">YT</a></div>
+    </div>
+    <div>
+      <div class="ft-ch">Comunidad</div>
+      <ul class="ft-ul"><li><a href="#">Unirse</a></li><li><a href="#">Calendario</a></li><li><a href="#">Directorio</a></li><li><a href="#">Ranking</a></li><li><a href="#">Journal</a></li></ul>
+    </div>
+    <div>
+      <div class="ft-ch">Recursos</div>
+      <ul class="ft-ul"><li><a href="#">Calculadora de Ritmo</a></li><li><a href="#">Rutas Cap Cana</a></li><li><a href="#">Coaches</a></li><li><a href="#">Recuperación</a></li><li><a href="#">Sobre Nosotros</a></li></ul>
+    </div>
+    <div>
+      <div class="ft-ch">Boletín Semanal</div>
+      <p class="nl-p">Resumen semanal: carreras, récords y noticias de la comunidad.</p>
+      <div class="nl"><input type="email" placeholder="tu@correo.com"><button>Suscribirme</button></div>
+    </div>
+  </div>
+  <div class="ft-bot"><div class="ft-copy">© 2025 Caco Runners · Cap Cana, República Dominicana</div><div class="ft-quote">"El milagro no es que terminé. Es que tuve el valor de comenzar."</div></div>
+</footer>
+
+<script>
+
+
+/* CURSOR */
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function anim(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;if(cur)cur.style.transform=`translate(${mx-5}px,${my-5}px)`;if(ring)ring.style.transform=`translate(${rx-18}px,${ry-18}px)`;requestAnimationFrame(anim);})();
+document.querySelectorAll('a,button,.dc,.j-feat,.j-sm').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{if(ring){ring.style.width='52px';ring.style.height='52px';ring.style.borderColor='rgba(94,235,255,.8)';}});
+  el.addEventListener('mouseleave',()=>{if(ring){ring.style.width='36px';ring.style.height='36px';ring.style.borderColor='rgba(94,235,255,.45)';}});
+});
+
+/* NAV */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('solid',scrollY>40),{passive:true});
+
+/* REVEAL */
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in');}),{threshold:.07});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+/* DIRECTORY FILTER */
+document.querySelectorAll('#dir-filters .df').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('#dir-filters .df').forEach(b=>b.classList.remove('on'));
+    this.classList.add('on');
+    const f=this.dataset.filter;
+    document.querySelectorAll('.dc').forEach(c=>c.classList.toggle('hidden',f!=='all'&&c.dataset.cat!==f));
+    /* rebuild grid gap visibility */
+    document.querySelector('.dir-g').style.background=document.querySelectorAll('.dc:not(.hidden)').length?'rgba(247,250,252,.04)':'transparent';
+  });
+});
+
+/* LB */
+
+
+/* TOOLS */
+function switchT(btn,id){
+  btn.closest('.tool-picker').querySelectorAll('.tool-pick').forEach(x=>x.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.tp').forEach(p=>p.classList.remove('on'));
+  document.getElementById('tool-'+id).classList.add('on');
+}
+
+/* helpers */
+function fmtP(r){const m=Math.floor(r),s=Math.round((r-m)*60);return m+':'+String(s).padStart(2,'0');}
+function fmtT(sec){const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;return h>0?h+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0'):m+':'+String(s).padStart(2,'0');}
+function fmtM(mins){const h=Math.floor(mins/60),m=Math.floor(mins%60),s=Math.round((mins%1)*60);return h>0?h+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0'):m+':'+String(s).padStart(2,'0');}
+
+function cPace(){
+  const d=parseFloat(document.getElementById('ds').value);
+  const p=parseFloat(document.getElementById('ps').value);
+  document.getElementById('dv').textContent=d+' km';
+  const ps=fmtP(p);
+  document.getElementById('pv').textContent=ps+' /km';
+  if(document.getElementById('pv2'))document.getElementById('pv2').textContent=ps+' /km';
+  document.getElementById('tv').textContent=fmtT(Math.round(d*p*60));
+  if(document.getElementById('sv'))document.getElementById('sv').textContent=(60/p).toFixed(1)+' km/h';
+}cPace();
+
+function cRace(){
+  const d1=parseFloat(document.getElementById('rd').value);
+  const t1=parseFloat(document.getElementById('rts').value);
+  const m=Math.floor(t1),s=Math.round((t1%1)*60);
+  document.getElementById('rtv').textContent=m+':'+String(s).padStart(2,'0');
+  const pred=d2=>t1*Math.pow(d2/d1,1.06);
+  document.getElementById('mpo').textContent=fmtM(pred(42.2));
+  document.getElementById('hmo').textContent=fmtM(pred(21.1));
+  if(document.getElementById('tko'))document.getElementById('tko').textContent=fmtM(pred(10));
+  if(document.getElementById('fko'))document.getElementById('fko').textContent=fmtM(pred(5));
+}cRace();
+
+function cSplits(){
+  const dist=parseFloat(document.getElementById('sds').value);
+  const time=parseFloat(document.getElementById('sts').value);
+  const every=parseFloat(document.getElementById('ses').value);
+  document.getElementById('sdv').textContent=dist+' km';
+  document.getElementById('stv').textContent=Math.floor(time/60)+':'+String(time%60).padStart(2,'0')+':00';
+  document.getElementById('sev').textContent=every+' km';
+  const pm=time/dist;
+  const rows=[];
+  let km=every;
+  let idx=1;
+  while(km<=dist+0.01){
+    const actualKm=Math.min(km,dist);
+    const elapsed=pm*actualKm;
+    rows.push(`<div class="split-row"><span class="sk">Km ${actualKm%1===0?actualKm:actualKm.toFixed(1)}</span><span class="sv">${fmtT(Math.round(elapsed*60))}</span></div>`);
+    km+=every;idx++;
+  }
+  document.getElementById('sout').innerHTML=`<div style="margin-bottom:1rem;padding:.75rem;background:rgba(79,209,232,.08);border:1px solid rgba(79,209,232,.15);"><div style="font-size:.56rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(247,250,252,.35);margin-bottom:.2rem;">Ritmo objetivo</div><div style="font-family:var(--f-d);font-weight:900;font-size:1.8rem;color:var(--aqua);letter-spacing:-.03em;">${fmtP(pm)} /km</div></div><div class="splits-list">${rows.join('')}</div>`;
+}cSplits();
+
+function cHR(){
+  const age=+document.getElementById('ags').value;
+  const rest=+document.getElementById('rss').value;
+  document.getElementById('agv').textContent=age+' años';
+  document.getElementById('rsv').textContent=rest+' bpm';
+  const max=220-age,hrr=max-rest;
+  if(document.getElementById('max-hr-display'))document.getElementById('max-hr-display').textContent=max+' bpm';
+  const zones=[
+    {n:'Z1 · Recuperación', desc:'Calentamiento y recuperación activa', p:[.50,.60],c:'#4FD1E8',w:18},
+    {n:'Z2 · Base Aeróbica', desc:'Quema grasa, fondo fácil',           p:[.60,.70],c:'#5EEBFF',w:35},
+    {n:'Z3 · Tempo',         desc:'Umbral aeróbico, ritmo de carrera',  p:[.70,.80],c:'#0E5A8A',w:56},
+    {n:'Z4 · Umbral',        desc:'Intensidad alta, mejora de ritmo',   p:[.80,.90],c:'#FFB37B',w:76},
+    {n:'Z5 · Máximo',        desc:'Esfuerzo máximo, intervalos cortos', p:[.90,1.0],c:'#F7FAFC',w:100},
+  ];
+  document.getElementById('hrz').innerHTML=zones.map(z=>{
+    const lo=Math.round(rest+z.p[0]*hrr),hi=Math.round(rest+z.p[1]*hrr);
+    return `<div class="hz-row">
+      <div class="hz-dot" style="background:${z.c}"></div>
+      <div style="flex:1">
+        <div class="hz-n">${z.n}</div>
+        <div style="font-size:.6rem;color:rgba(247,250,252,.28);margin-top:.1rem;">${z.desc}</div>
+      </div>
+      <div class="hz-r">${lo}–${hi}<span style="font-size:.6rem;margin-left:.2rem;opacity:.5">bpm</span></div>
+      <div class="hz-bg"><div class="hz-fill" style="width:${z.w}%;background:${z.c}"></div></div>
+    </div>`;
+  }).join('');
+}cHR();
+
+
+</script>
+</body>
+</html>
